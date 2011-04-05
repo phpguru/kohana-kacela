@@ -6,7 +6,7 @@
  * 
 */
 
-require MODPATH.'/gacela/vendor/Gacela/library/Gacela.php';
+require MODPATH.'/kacela/vendor/Gacela/library/Gacela.php';
 
 class Kacela extends Gacela {
 
