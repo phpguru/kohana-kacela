@@ -1,0 +1,3 @@
+[submodule "vendor/Gacela"]
+	path = vendor/Gacela
+	url = git@github.com:gabriel1836/gacela.git
