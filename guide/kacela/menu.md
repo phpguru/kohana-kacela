@@ -4,4 +4,5 @@
 	 - [Design Patterns in Kacela](kacela.design-patterns)
  - Usage
  	- [Installation](kacela.installation)
+ 	- [Getting Started](kacela.getting-started)
  	- [The Basics](kacela.basics)

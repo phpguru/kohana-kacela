@@ -12,10 +12,11 @@ Or you can download the github repository directly as a submodule into your proj
 
 
 
-Once you have the full Kacela module installed:
-
+# Initialize Kacela
 
 1. Add kacela to your modules array in bootstrap.php
 2. In modules/kacela, create init.php
+3. Under application/classes, create a directory to hold your namespaced Kacela classes and the Mapper and Model directories under it for holding your
+application's Mappers and Models.
 3. [Register](kacela.kacela#registering-custom-application-namespaces) your application's custom namespace with the Kacela instance
 4. [Register](kacela.kacela#registering-datasources) any [DataSources](kacela.datasources) with the Kacela instance

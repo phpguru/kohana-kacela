@@ -67,6 +67,21 @@ Returns a concrete instance of Gacela\Model. If a record matching $id was found 
 
 ### find_all($mapper, $criteria)
 
+#### Example
+
+	$criteria = Kacela::criteria();
+
+	$criteria->like('email', '@domain.com');
+
+	// $users is an instance of Gacela\Collection
+	$users = Kacela::find_all('user', $criteria);
+
+	foreach($users as $user)
+	{
+		// Emails will all contain the string @domain.com
+		echo $user->email;
+	}
+
 # Loading Mappers directly
 
 ### load($mapper)
