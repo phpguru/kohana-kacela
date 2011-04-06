@@ -6,3 +6,12 @@
  	- [Installation](kacela.installation)
  	- [Getting Started](kacela.getting-started)
  	- [The Basics](kacela.basics)
+ - Classes
+ 	- [Kacela](kacela.kacela)
+ 	- [DataSource](kacela.datasource)
+ 		* Types
+ 			- [Database](kacela.datasource.database)
+ 		* [Resource](kacela.datasource.resource)
+ 		* Query
+ 			- [Database](kacela.datasource.query.database)
+ 		
