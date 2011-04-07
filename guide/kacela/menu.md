@@ -1,17 +1,20 @@
 ## [Kacela]()
  - Introduction
-	 - [Of ORMs and Data Mappers](kacela.orm-vs-datamapper)
-	 - [Design Patterns in Kacela](kacela.design-patterns)
+	 - [Of ORMs and Data Mappers](orm-vs-datamapper)
+	 - [Design Patterns in Kacela](design-patterns)
  - Usage
  	- [Installation](kacela.installation)
  	- [Getting Started](kacela.getting-started)
- 	- [The Basics](kacela.basics)
+ 	- [The Basics](basics)
  - Classes
  	- [Kacela](kacela.kacela)
- 	- [DataSource](kacela.datasource)
+ 	- [DataSource](datasource)
  		* Types
- 			- [Database](kacela.datasource.database)
- 		* [Resource](kacela.datasource.resource)
+ 			- [Database](datasource.database)
+ 		* [Resource](datasource.resource)
  		* Query
- 			- [Database](kacela.datasource.query.database)
- 		
+ 			- [Database](datasource.query.database)
+ 	- [Mapper](mapper)
+ 	- [Model](model)
+ 	- [Collection](collection)
+ 	- [Criteria](criteria)
