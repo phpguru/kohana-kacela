@@ -3,11 +3,11 @@
 	 - [Of ORMs and Data Mappers](orm-vs-datamapper)
 	 - [Design Patterns in Kacela](design-patterns)
  - Usage
- 	- [Installation](kacela.installation)
- 	- [Getting Started](kacela.getting-started)
+ 	- [Installation](installation)
+ 	- [Getting Started](getting-started)
  	- [The Basics](basics)
  - Classes
- 	- [Kacela](kacela.kacela)
+ 	- [Kacela](kacela)
  	- [DataSource](datasource)
  		* Types
  			- [Database](datasource.database)

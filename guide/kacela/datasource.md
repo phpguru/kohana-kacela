@@ -5,6 +5,8 @@ Kacela can hold references to many data sources at a single time, though the mos
 A DataSource represents a specific source of data to be consumed by your application. DataSources can include databases, web services, xml files, other files or
 anything else you can come up with.
 
+DataSources provide [Mappers](mapper) with access to [Resources](datasource.resource).
+
 Each type of DataSource will also have its own type of Query object as well as a Resource object that will be utilized when loading discreet resources from the
 DataSource.
 
