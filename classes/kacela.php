@@ -8,7 +8,8 @@
 
 require MODPATH.'/kacela/vendor/Gacela/library/Gacela.php';
 
-class Kacela extends Gacela {
+class Kacela extends Gacela
+{
 
 	/**
 	 * @static
@@ -50,5 +51,31 @@ class Kacela extends Gacela {
 	{
 		$criteria = self::instance()->autoload('\\Criteria');
 		return new $criteria();
+	}
+
+	public function autoload($class)
+	{
+		$parts = explode("\\", $class);
+		$self = self::instance();
+
+		if (isset($self->_namespaces[$parts[0]])) {
+			$file = $self->_namespaces[$parts[0]] . str_replace("\\", "/", $class) . '.php';
+			if ($self->_findFile($file)) {
+				require $file;
+				return $class;
+			}
+		} else {
+			$namespaces = array_reverse($self->_namespaces);
+			foreach ($namespaces as $ns => $path) {
+				$file = $path . $ns . str_replace("\\", "/", $class) . '.php';
+
+				if ($self->_findFile($file)) {
+					require $file;
+					return $ns . $class;
+				}
+			}
+		}
+
+		return false;
 	}
 }
