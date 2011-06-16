@@ -50,7 +50,7 @@ class Kacela extends Gacela
 	public static function instance()
 	{
 		if (is_null(self::$_instance)) {
-			self::$_instance = new Gacela();
+			self::$_instance = new Kacela();
 		}
 
 		return self::$_instance;
@@ -66,6 +66,10 @@ class Kacela extends Gacela
 		return self::instance()->loadMapper(ucfirst($mapper));
 	}
 
+	/**
+	 * @param  string $class
+	 * @return bool|string
+	 */
 	public function autoload($class)
 	{
 		$parts = explode("\\", $class);
@@ -73,17 +77,28 @@ class Kacela extends Gacela
 
 		if (isset($self->_namespaces[$parts[0]]))
 		{
-			if($parts[0] == 'Gacela')
+			if (class_exists($class))
+			{
+				return $class;
+			}
+			elseif ($parts[0] == 'Gacela')
 			{
 				return parent::autoload($class);
 			}
-
-			$file = strtolower($self->_namespaces[$parts[0]] . str_replace("\\", "/", $class) . '.php');
-
-			if ($self->_findFile($file))
+			else
 			{
-				require $file;
-				return $class;
+				$path = $parts;
+				unset($path[0]);
+
+				$path = join('/', $path);
+
+				$file = strtolower($self->_namespaces[$parts[0]] . $path . '.php');
+				
+				if ($self->_findFile($file))
+				{
+					require $file;
+					return $class;
+				}
 			}
 		} else {
 
@@ -91,16 +106,26 @@ class Kacela extends Gacela
 
 			foreach ($namespaces as $ns => $path)
 			{
-				if($ns == 'Gacela')
+				if ($ns == 'Gacela')
 				{
 					return parent::autoload($class);
 				}
-				
-				$file = strtolower($path . $ns . str_replace("\\", "/", $class) . '.php');
 
-				if ($self->_findFile($file)) {
-					require $file;
-					return $ns . $class;
+				$file = strtolower($path . str_replace("\\", "/", $class) . '.php');
+
+				if ($self->_findFile($file))
+				{
+					$class = $ns . $class;
+
+					if (class_exists($class))
+					{
+						return $class;
+					}
+					else
+					{
+						require $file;
+						return $class;
+					}
 				}
 			}
 		}

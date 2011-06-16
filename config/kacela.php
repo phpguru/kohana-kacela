@@ -7,11 +7,11 @@
  */
  defined('SYSPATH') OR die('No direct access allowed.');
 
-$config = array
+return array
 (
 	'namespaces' => array
 	(
-		'classes' => APPPATH,
+		'App' => APPPATH.'/classes',
 		'kacela' => MODPATH.'/classes/'
 	),
 	'datasources' => array

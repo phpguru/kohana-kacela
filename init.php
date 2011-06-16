@@ -6,19 +6,18 @@
  * 
  */
 
-
-Gacela\DataSource\Adapter\Mysql::$_separator = '-';
-
 $config = Kohana::config('kacela');
 
 $kacela = Kacela::instance();
 
-foreach($config['namespace'] as $ns => $path)
+Gacela\DataSource\Adapter\Mysql::$_separator = '-';
+
+foreach($config['namespaces'] as $ns => $path)
 {
 	$kacela->register_namespace($ns, $path);
 }
 
-foreach($config['datasource'] as $name => $source)
+foreach($config['datasources'] as $name => $source)
 {
 	$kacela->register_datasource($name, $source['type'], $source);
 }
