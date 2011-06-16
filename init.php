@@ -7,11 +7,23 @@
  */
 
 
+Gacela\DataSource\Adapter\Mysql::$_separator = '-';
+
 $config = Kohana::config('kacela');
 
 $kacela = Kacela::instance();
 
-$kacela->registerNamespace('Lendio', APPPATH.'classes/')
-		->registerDataSource('db', 'database', $config['optimus']);
+foreach($config['namespace'] as $ns => $path)
+{
+	$kacela->register_namespace($ns, $path);
+}
 
-Gacela\DataSource\Resource\Database::setSeparator('-');
+foreach($config['datasource'] as $name => $source)
+{
+	$kacela->register_datasource($name, $source['type'], $source);
+}
+
+if($config['cache'])
+{
+	$kacela->enable_cache(Cache::instance());
+}
