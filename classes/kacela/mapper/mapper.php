@@ -18,9 +18,4 @@ class Mapper extends M\Mapper implements iMapper {
 	{
 		return parent::findAll($criteria);
 	}
-
-	public function findAll(\Gacela\Criteria $criteria = null)
-	{
-		trigger_error('Use find_all()', E_ERROR);
-	}
 }
