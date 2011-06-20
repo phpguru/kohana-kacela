@@ -87,6 +87,7 @@ class Kacela extends Gacela
 			}
 			else
 			{
+
 				$path = $parts;
 				unset($path[0]);
 
@@ -103,7 +104,6 @@ class Kacela extends Gacela
 		}
 		else
 		{
-
 			$namespaces = array_reverse($self->_namespaces);
 
 			foreach ($namespaces as $ns => $path)

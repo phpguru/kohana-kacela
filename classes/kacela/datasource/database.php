@@ -8,6 +8,12 @@
 
 namespace Kacela\DataSource;
 
-class Database extends DataSource {
+use Gacela\DataSource as D;
 
+class Database extends D\Database {
+
+	protected function _singleton()
+	{
+		return \Kacela::instance();
+	}
 }
