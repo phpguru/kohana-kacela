@@ -100,7 +100,9 @@ class Kacela extends Gacela
 					return $class;
 				}
 			}
-		} else {
+		}
+		else
+		{
 
 			$namespaces = array_reverse($self->_namespaces);
 
@@ -111,7 +113,16 @@ class Kacela extends Gacela
 					return parent::autoload($class);
 				}
 
-				$file = strtolower($path . str_replace("\\", "/", $class) . '.php');
+				if (substr($class, 0, 1) == '\\')
+				{
+					$tmp = substr($class, 1);
+				}
+				else
+				{
+					$tmp = $class;
+				}
+
+				$file = strtolower($path . str_replace("\\", "/", $tmp) . '.php');
 
 				if ($self->_findFile($file))
 				{
