@@ -129,7 +129,7 @@ class Kacela extends Gacela
 				}
 			}
 		}
-
+		
 		return false;
 	}
 
