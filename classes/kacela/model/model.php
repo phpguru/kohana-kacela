@@ -13,6 +13,11 @@ use Gacela\Model as M;
 class Model extends M\Model
 {
 
+	protected function _get_errors()
+	{
+		return parent::_getErrors();
+	}
+
 	/**
 	 * @throws \Exception
 	 * @param  string $key
@@ -82,5 +87,4 @@ class Model extends M\Model
 			$this->_data->$key = $this->_fields[$key]->transform($val, false);
 		}
 	}
-	
 }
