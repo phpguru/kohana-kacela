@@ -40,7 +40,7 @@ class Kacela_Core extends Gacela
 	 */
 	public static function find_all($mapper, Gacela\Criteria $criteria = null)
 	{
-		return self::load(ucfirst($mapper))->findAll($criteria);
+		return self::load($mapper)->find_all($criteria);
 	}
 
 	/**
