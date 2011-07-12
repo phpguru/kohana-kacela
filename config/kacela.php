@@ -11,7 +11,7 @@ return array
 (
 	'namespaces' => array
 	(
-		'App' => APPPATH.'classes',
+		'App' => APPPATH.'classes/',
 		'Kacela' => MODPATH.'kacela/classes/kacela/'
 	),
 	'datasources' => array

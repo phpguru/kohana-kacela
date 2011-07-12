@@ -14,6 +14,11 @@ use Gacela\Mapper as M;
 
 class Mapper extends M\Mapper implements iMapper {
 
+	protected function _singleton()
+	{
+		return \kacela::instance();
+	}
+	
 	public function find_all(\Gacela\Criteria $criteria = null)
 	{
 		return parent::findAll($criteria);
