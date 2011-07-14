@@ -12,7 +12,6 @@ use Gacela\Model as M;
 
 class Model extends M\Model
 {
-
 	protected function _get_errors()
 	{
 		return parent::_getErrors();
