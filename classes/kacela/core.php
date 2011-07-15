@@ -144,6 +144,44 @@ class Kacela_Core extends Gacela
 		return false;
 	}
 
+	/**
+	 * @param  $key
+	 * @param null $object
+	 * @return object|bool
+	 */
+	public function cache($key, $object = null, $replace = false)
+	{
+		if (!$this->_cacheEnabled)
+		{
+			if (is_null($object))
+			{
+				if (isset($this->_cached[$key]))
+				{
+					return $this->_cached[$key];
+				}
+
+				return false;
+			}
+			else
+			{
+				$this->_cached[$key] = $object;
+
+				return true;
+			}
+		}
+		else
+		{
+			if (is_null($object))
+			{
+				return $this->_cache->get($key);
+			}
+			else
+			{
+				return $this->_cache->set($key, $object);
+			}
+		}
+	}
+
 	public function cache_enabled()
 	{
 		return $this->_cacheEnabled;
@@ -163,9 +201,16 @@ class Kacela_Core extends Gacela
 		return parent::getDataSource($name);
 	}
 
-	public function increment_cache($key)
+	public function incrementCache($key)
 	{
-		return parent::incrementCache($key);
+		if (!$this->cacheEnabled()) {
+			$this->_cached[$key]++;
+		} else {
+			$val = $this->_cache->get($key);
+			$val++;
+			
+			$this->_cache->set($key, $val);
+		}
 	}
 
 	public function register_datasource($name, $type, $config)
