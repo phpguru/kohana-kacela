@@ -4,6 +4,8 @@ Kacela is the Kohana specific implementation of the stand-alone data mapper libr
 
 For full documentation on GacelaPHP go to [the project site](http://gacelaphp.com).
 
+For examples of using Kacela/Gacela, [download the sample project](https://github.com/gabriel1836/kacela-sample)
+
 The documentation contained here is specifically to cover where Kacela deviates from Gacela.
 
 ## Configuration
