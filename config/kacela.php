@@ -20,7 +20,7 @@ return array
 		(
 			'type' => 'database',
 			'dbtype' => 'mysql',
-			'schema' => 'gacela',
+			'schema' => 'kacela',
 			'host' => 'localhost',
 			'user' => 'root',
 			'password' => ''
