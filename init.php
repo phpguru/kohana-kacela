@@ -6,7 +6,7 @@
  * 
  */
 
-$config = Kohana::config('kacela');
+$config = Kohana::$config->load('kacela');
 
 $kacela = Kacela::instance();
 
