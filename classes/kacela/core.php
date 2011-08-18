@@ -8,8 +8,7 @@
 
 require MODPATH.'/kacela/vendor/Gacela/library/Gacela.php';
 
-class Kacela_Core extends Gacela
-{
+class Kacela_Core extends Gacela {
 
 	/**
 	 * @static
