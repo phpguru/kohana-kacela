@@ -10,7 +10,7 @@ $config = Kohana::$config->load('kacela');
 
 $kacela = Kacela::instance();
 
-Gacela\DataSource\Adapter\Mysql::$_separator = '_';
+Gacela\DataSource\Adapter\Mysql::$_separator = '-';
 
 foreach($config['namespaces'] as $ns => $path)
 {
