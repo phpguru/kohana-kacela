@@ -12,6 +12,8 @@ $kacela = Kacela::instance();
 
 Gacela\DataSource\Adapter\Mysql::$_separator = '-';
 
+$kacela->configPath(APPPATH.'config/kacela');
+
 foreach($config['namespaces'] as $ns => $path)
 {
 	$kacela->register_namespace($ns, $path);
