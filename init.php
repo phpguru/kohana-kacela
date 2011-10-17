@@ -12,7 +12,10 @@ $kacela = Kacela::instance();
 
 Gacela\DataSource\Adapter\Mysql::$_separator = '-';
 
-$kacela->configPath(APPPATH.'config/kacela');
+if(is_dir(APPPATH . 'config/kacela'))
+{
+	$kacela->configPath(APPPATH . 'config/kacela');
+}
 
 foreach($config['namespaces'] as $ns => $path)
 {
