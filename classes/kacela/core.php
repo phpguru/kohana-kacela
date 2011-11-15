@@ -6,7 +6,7 @@
  * 
 */
 
-require MODPATH.'/kacela/vendor/Gacela/library/Gacela.php';
+require MODPATH.'kacela'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'Gacela'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'Gacela.php';
 
 class Kacela_Core extends Gacela {
 
