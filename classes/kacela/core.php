@@ -103,7 +103,7 @@ class Kacela_Core extends Gacela {
 		}
 		else
 		{
-			$namespaces = array_reverse($self->_namespaces);
+                                    $namespaces = array_reverse($self->_namespaces);
 
 			foreach ($namespaces as $ns => $path)
 			{
