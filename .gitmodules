@@ -1,3 +1,3 @@
 [submodule "vendor/Gacela"]
 	path = vendor/Gacela
-	url = https://github.com/gabriel1836/gacela.git
+	url = git@github.com:LendioDevs/gacela.git
