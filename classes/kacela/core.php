@@ -1,14 +1,19 @@
 <?php
-/** 
+/**
  * @author noah
  * @date 3/26/11
  * @brief
- * 
+ *
 */
 
 require MODPATH.'kacela'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'Gacela'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'Gacela.php';
 
 class Kacela_Core extends Gacela {
+
+	public static function count($mapper, \Gacela\Criteria $criteria = null)
+	{
+		return self::load($mapper)->count($criteria);
+	}
 
 	/**
 	 * @static
@@ -20,6 +25,16 @@ class Kacela_Core extends Gacela {
 		return new $criteria();
 	}
 
+	public static function factory($mapper, $id = null)
+	{
+		if(is_null($id))
+		{
+			return self::load($mapper)->load();
+		}
+
+		return self::find($id);
+	}
+
 	/**
 	 * @static
 	 * @param  $mapper
@@ -28,7 +43,7 @@ class Kacela_Core extends Gacela {
 	 */
 	public static function find($mapper, $id = null)
 	{
-		return self::load(ucfirst($mapper))->find($id);
+		return self::load($mapper)->find($id);
 	}
 
 	/**
@@ -37,7 +52,7 @@ class Kacela_Core extends Gacela {
 	 * @param Gacela\Criteria|null $criteria
 	 * @return Gacela\Collection
 	 */
-	public static function find_all($mapper, Gacela\Criteria $criteria = null)
+	public static function find_all($mapper, \Gacela\Criteria $criteria = null)
 	{
 		return self::load($mapper)->find_all($criteria);
 	}
@@ -93,7 +108,7 @@ class Kacela_Core extends Gacela {
 				$path = join('/', $path);
 
 				$file = $self->_namespaces[$parts[0]].strtolower($path).'.php';
-				
+
 				if ($self->_findFile($file))
 				{
 					require $file;
@@ -139,7 +154,7 @@ class Kacela_Core extends Gacela {
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -207,7 +222,7 @@ class Kacela_Core extends Gacela {
 		} else {
 			$val = $this->_cache->get($key);
 			$val++;
-			
+
 			$this->_cache->set($key, $val);
 		}
 	}
