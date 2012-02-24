@@ -32,7 +32,7 @@ class Kacela_Core extends Gacela {
 			return self::load($mapper)->load();
 		}
 
-		return self::find($id);
+		return self::find($mapper, $id);
 	}
 
 	/**
