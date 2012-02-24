@@ -29,7 +29,7 @@ class Kacela_Core extends Gacela {
 	{
 		if(is_null($id))
 		{
-			return self::load($mapper)->load();
+			return self::load($mapper)->load((object) array());
 		}
 
 		return self::find($mapper, $id);
