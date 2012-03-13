@@ -8,6 +8,24 @@ For examples of using Kacela/Gacela, [download the sample project](https://githu
 
 The documentation contained here is specifically to cover where Kacela deviates from Gacela.
 
+## Relationship Definitions
+
+If you refer to the [Gacela](http://gacelaphp.com/documentation/usage/relationships-basic/) documentation on relationships,
+the default value for defining foreign keys uses the '_' to separate values.
+Given Kohana conventions that use the '_' character in variable and function names, it is necessary to use a different separator when defining foreign keys. 
+
+In the kacela/init.php file, the separator is modified:
+
+Gacela\DataSource\Adapter\Mysql::$_separator = '-';
+
+So that foreign key definitions would be like: `fk-teacher-courses`.
+
+The other rules still apply:
+
+1. ‘fk-’ – This is a convention to allow you to look at the database directly and discern which constraints are foreign keys
+2. The name used to reference the ‘Belongs To’ side of the relationship
+3. The name used to reference the ‘Has Many’ side of the relationship
+
 ## Configuration
 
 	return array
