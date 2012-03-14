@@ -1,9 +1,9 @@
 <?php
-/** 
+/**
  * @author noah
  * @date 3/23/11
  * @brief
- * 
+ *
  */
 
 $config = Kohana::$config->load('kacela');
@@ -27,7 +27,7 @@ foreach($config['datasources'] as $name => $source)
 	$kacela->register_datasource($name, $source['type'], $source);
 }
 
-if($config['cache'])
+if(isset($config['cache_schema']) OR isset($config['cache_data']))
 {
-	$kacela->enable_cache(Cache::instance());
+	$kacela->enable_cache(Cache::instance(), \Arr::get($config, 'cache_schema', true), \Arr::get($config, 'cache_data', false));
 }

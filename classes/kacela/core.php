@@ -165,7 +165,7 @@ class Kacela_Core extends Gacela {
 	 */
 	public function cache($key, $object = null, $replace = false)
 	{
-		if (!$this->_cacheEnabled)
+		if(!$this->_cacheData AND ($this->_cacheSchema === false OR (stristr($key, 'resource_') === false AND stristr($key, 'mapper_') === false)))
 		{
 			if (is_null($object))
 			{
@@ -196,16 +196,12 @@ class Kacela_Core extends Gacela {
 		}
 	}
 
-	public function cache_enabled()
-	{
-		return $this->_cacheEnabled;
-	}
-
-	public function enable_cache(Cache $cache)
+	public function enable_cache(Cache $cache, $schema = true, $data = true)
 	{
 		$this->_cache = $cache;
 
-		$this->_cacheEnabled = true;
+		$this->_cacheSchema = $schema;
+		$this->_cacheData = $data;
 
 		return $this;
 	}
@@ -217,7 +213,7 @@ class Kacela_Core extends Gacela {
 
 	public function incrementCache($key)
 	{
-		if (!$this->cacheEnabled()) {
+		if (!$this->_cacheData) {
 			$this->_cached[$key]++;
 		} else {
 			$val = $this->_cache->get($key);
