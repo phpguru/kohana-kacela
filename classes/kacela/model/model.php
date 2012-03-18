@@ -1,9 +1,9 @@
 <?php
-/** 
+/**
  * @author noahg
  * @date 6/16/11
  * @brief
- * 
+ *
  */
 
 namespace Kacela\Model;
@@ -77,13 +77,7 @@ abstract class Model extends M\Model {
 		if (method_exists($this, $method)) {
 			$this->$method($val);
 		} else {
-			if (isset($this->_data->$key)) {
-				$this->_originalData[$key] = $this->_data->$key;
-			}
-
-			$this->_changed[] = $key;
-
-			$this->_data->$key = $this->_fields[$key]->transform($val, false);
+			parent::__set($key, $val);
 		}
 	}
 }

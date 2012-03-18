@@ -1,9 +1,9 @@
 <?php
-/** 
+/**
  * @author noahg
  * @date 6/16/11
  * @brief
- * 
+ *
  */
  defined('SYSPATH') OR die('No direct access allowed.');
 
@@ -26,5 +26,6 @@ return array
 			'password' => ''
 		)
 	),
-	'cache' => false
+	'cache_schema' => false,
+	'cache_data' => false
 );
