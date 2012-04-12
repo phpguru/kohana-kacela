@@ -105,7 +105,7 @@ class Kacela_Core extends Gacela {
 				$path = $parts;
 				unset($path[0]);
 
-				$path = join('/', $path);
+				$path = join(DIRECTORY_SEPARATOR, $path);
 
 				$file = $self->_namespaces[$parts[0]].strtolower($path).'.php';
 
@@ -136,7 +136,7 @@ class Kacela_Core extends Gacela {
 					$tmp = $class;
 				}
 
-				$file = $path.strtolower(str_replace("\\", "/", $tmp)).'.php';
+				$file = $path.strtolower(str_replace("\\", DIRECTORY_SEPARATOR, $tmp)).'.php';
 
 				if ($self->_findFile($file))
 				{
