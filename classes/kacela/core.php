@@ -118,7 +118,7 @@ class Kacela_Core extends Gacela {
 		}
 		else
 		{
-                                    $namespaces = array_reverse($self->_namespaces);
+			$namespaces = array_reverse($self->_namespaces);
 
 			foreach ($namespaces as $ns => $path)
 			{
@@ -137,7 +137,7 @@ class Kacela_Core extends Gacela {
 				}
 
 				$file = $path.strtolower(str_replace("\\", DIRECTORY_SEPARATOR, $tmp)).'.php';
-
+				
 				if ($self->_findFile($file))
 				{
 					$class = $ns . $class;
