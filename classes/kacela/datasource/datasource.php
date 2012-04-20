@@ -10,10 +10,8 @@ namespace Kacela\DataSource;
 
 use Gacela\DataSource as D;
 
-abstract class DataSource extends D\DataSource {
+abstract class DataSource extends D\DataSource
+{
 
-	protected function _singleton()
-	{
-		return \Kacela::instance();
-	}
+
 }

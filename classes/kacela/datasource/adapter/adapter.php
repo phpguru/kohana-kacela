@@ -13,8 +13,5 @@ use Gacela\DataSource\Adapter as A;
 
 abstract class Adapter extends A\Adapter
 {
-	protected function _singleton()
-	{
-		return \Kacela::instance();
-	}
+
 }
