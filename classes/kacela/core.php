@@ -29,7 +29,7 @@ class Kacela_Core extends Gacela {
 	{
 		if(is_null($id))
 		{
-			return self::load($mapper)->load();
+			return self::load($mapper)->load((object) array());
 		}
 
 		return self::find($mapper, $id);
@@ -105,7 +105,7 @@ class Kacela_Core extends Gacela {
 				$path = $parts;
 				unset($path[0]);
 
-				$path = join('/', $path);
+				$path = join(DIRECTORY_SEPARATOR, $path);
 
 				$file = $self->_namespaces[$parts[0]].strtolower($path).'.php';
 
@@ -118,7 +118,7 @@ class Kacela_Core extends Gacela {
 		}
 		else
 		{
-                                    $namespaces = array_reverse($self->_namespaces);
+			$namespaces = array_reverse($self->_namespaces);
 
 			foreach ($namespaces as $ns => $path)
 			{
@@ -136,8 +136,8 @@ class Kacela_Core extends Gacela {
 					$tmp = $class;
 				}
 
-				$file = $path.strtolower(str_replace("\\", "/", $tmp)).'.php';
-
+				$file = $path.strtolower(str_replace("\\", DIRECTORY_SEPARATOR, $tmp)).'.php';
+				
 				if ($self->_findFile($file))
 				{
 					$class = $ns . $class;
@@ -165,7 +165,7 @@ class Kacela_Core extends Gacela {
 	 */
 	public function cache($key, $object = null, $replace = false)
 	{
-		if (!$this->_cacheEnabled)
+		if(!$this->_cacheData AND ($this->_cacheSchema === false OR (stristr($key, 'resource_') === false AND stristr($key, 'mapper_') === false)))
 		{
 			if (is_null($object))
 			{
@@ -196,16 +196,12 @@ class Kacela_Core extends Gacela {
 		}
 	}
 
-	public function cache_enabled()
-	{
-		return $this->_cacheEnabled;
-	}
-
-	public function enable_cache(Cache $cache)
+	public function enable_cache(Cache $cache, $schema = true, $data = true)
 	{
 		$this->_cache = $cache;
 
-		$this->_cacheEnabled = true;
+		$this->_cacheSchema = $schema;
+		$this->_cacheData = $data;
 
 		return $this;
 	}
@@ -217,7 +213,7 @@ class Kacela_Core extends Gacela {
 
 	public function incrementCache($key)
 	{
-		if (!$this->cacheEnabled()) {
+		if (!$this->_cacheData) {
 			$this->_cached[$key]++;
 		} else {
 			$val = $this->_cache->get($key);
