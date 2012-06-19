@@ -98,7 +98,7 @@ abstract class Model extends M\Model {
 		} elseif (array_key_exists($key, $this->_relations)) {
 			return $this->_mapper()->findRelation($key, $this->_data);
 		} else {
-			if (property_exists($this->_data, $key)) {
+			if(property_exists($this->_data, $key)) {
 				return $this->_data->$key;
 			}
 		}
