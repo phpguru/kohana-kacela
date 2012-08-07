@@ -8,7 +8,7 @@
 
 require MODPATH.'kacela'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'Gacela'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'Gacela.php';
 
-class Kacela_Core extends Gacela {
+class Kohana_Kacela extends Gacela {
 
 	public static function count($mapper, \Gacela\Criteria $criteria = null)
 	{
@@ -137,7 +137,7 @@ class Kacela_Core extends Gacela {
 				}
 
 				$file = $path.strtolower(str_replace("\\", DIRECTORY_SEPARATOR, $tmp)).'.php';
-				
+
 				if ($self->_findFile($file))
 				{
 					$class = $ns . $class;
