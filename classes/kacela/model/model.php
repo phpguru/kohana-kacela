@@ -200,4 +200,14 @@ abstract class Model extends M\Model {
 		return $this->setData($data);
 	}
 
+	public function validate(array $data = null)
+	{
+		if($data instanceof \Formo_Form)
+		{
+			$data = $data->val();
+		}
+
+		return parent::validate($data);
+	}
+
 }
