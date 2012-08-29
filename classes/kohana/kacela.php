@@ -124,7 +124,7 @@ class Kohana_Kacela extends Gacela {
 			{
 				if ($ns == 'Gacela')
 				{
-					return parent::autoload($class);
+					return parent::autoload($ns.$class);
 				}
 
 				if (substr($class, 0, 1) == '\\')
@@ -138,19 +138,16 @@ class Kohana_Kacela extends Gacela {
 
 				$file = $path.strtolower(str_replace("\\", DIRECTORY_SEPARATOR, $tmp)).'.php';
 
-				if ($self->_findFile($file))
+				$tmp = $ns.$class;
+				echo $tmp.'<br/>';
+				if(class_exists($tmp))
 				{
-					$class = $ns . $class;
-
-					if (class_exists($class))
-					{
-						return $class;
-					}
-					else
-					{
-						require $file;
-						return $class;
-					}
+					return $tmp;
+				}
+				elseif ($self->_findFile($file))
+				{
+					require $file;
+					return $tmp;
 				}
 			}
 		}
