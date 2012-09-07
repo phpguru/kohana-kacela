@@ -118,7 +118,7 @@ abstract class Kohana_Kacela_Model extends M\Model
 		} elseif (isset($this->_relations[$key])) {
 			$relation = $this->$key;
 
-			if ($relation instanceof \Gacela\Collection) {
+			if ($relation instanceof \Gacela\Collection\Collection) {
 				return count($relation) > 0;
 			} else {
 				if (!is_array($this->_relations[$key])) {

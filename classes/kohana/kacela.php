@@ -73,11 +73,11 @@ class Kohana_Kacela extends Gacela {
 	/**
 	 * @static
 	 * @param  $mapper
-	 * @return Mapper\Mapper
+	 * @return Kacela_Mapper
 	 */
 	public static function load($mapper)
 	{
-		return static::instance()->loadMapper(ucfirst($mapper));
+		return static::instance()->load_mapper(ucfirst($mapper));
 	}
 
 	/**
@@ -145,13 +145,66 @@ class Kohana_Kacela extends Gacela {
 		}
 	}
 
-	public function register_datasource($name, $type, $config)
+	/**
+	 * @throws Exception
+	 * @param  string $name Relative name of the Mapper to load. For example, if the absolute name of the mapper was \App\Mapper\User, you would pass 'user' in as the argument
+	 * @return Gacela\Mapper\Mapper
+	 */
+	public function load_mapper($name)
 	{
-		return parent::registerDataSource($name, $type, $config);
+		$name = ucfirst($name);
+
+		$cached = $this->cache('mapper_'.$name);
+
+		if ($cached === false || is_null($cached)) {
+			$class = "Kacela_Mapper_" . $name;
+
+			$cached = new $class;
+
+			$this->cache('mapper_'.$name, $cached);
+		}
+
+		return $cached;
 	}
 
-	public function register_namespace($ns, $path)
+	/**
+	 * Collection factory method
+	 *
+	 * @param \Gacela\Mapper\Mapper $mapper
+	 * @param array $data
+	 * @return \Gacela\Collection\Collection
+	 * @throws Exception
+	 */
+	public function make_collection($mapper, $data)
 	{
-		return parent::registerNamespace($ns, $path);
+		$col = 'Kacela_Collection_';
+		if($data instanceof \PDOStatement) {
+			$col .= 'Statement';
+		} elseif (is_array($data)) {
+			$col .= 'Arr';
+		} else {
+			throw new \Exception('Collection type is not defined!');
+		}
+
+		return new $col($mapper, $data);
+	}
+
+
+	/**
+	 * @param $name
+	 * @param $type
+	 * @param $config
+	 * @return Gacela
+	 */
+	public function register_datasource($name, $type, $config)
+	{
+		$config['name'] = $name;
+		$config['type'] = $type;
+
+		$class = 'Kacela_DataSource_'.ucfirst($type);
+
+		$this->_sources[$name] = new $class($config);
+
+		return $this;
 	}
 }
