@@ -12,7 +12,7 @@ class Kohana_Kacela extends Gacela {
 
 	public static function count($mapper, \Gacela\Criteria $criteria = null)
 	{
-		return self::load($mapper)->count($criteria);
+		return static::load($mapper)->count($criteria);
 	}
 
 	/**
@@ -21,7 +21,7 @@ class Kohana_Kacela extends Gacela {
 	 */
 	public static function criteria()
 	{
-		$criteria = self::instance()->autoload('\\Criteria');
+		$criteria = static::instance()->autoload('\\Criteria');
 		return new $criteria();
 	}
 
@@ -29,10 +29,10 @@ class Kohana_Kacela extends Gacela {
 	{
 		if(is_null($id))
 		{
-			return self::load($mapper)->load((object) array());
+			return static::load($mapper)->load((object) array());
 		}
 
-		return self::find($mapper, $id);
+		return static::find($mapper, $id);
 	}
 
 	/**
@@ -43,7 +43,7 @@ class Kohana_Kacela extends Gacela {
 	 */
 	public static function find($mapper, $id = null)
 	{
-		return self::load($mapper)->find($id);
+		return static::load($mapper)->find($id);
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Kohana_Kacela extends Gacela {
 	 */
 	public static function find_all($mapper, \Gacela\Criteria $criteria = null)
 	{
-		return self::load($mapper)->find_all($criteria);
+		return static::load($mapper)->find_all($criteria);
 	}
 
 	/**
@@ -63,11 +63,11 @@ class Kohana_Kacela extends Gacela {
 	 */
 	public static function instance()
 	{
-		if (is_null(self::$_instance)) {
-			self::$_instance = new Kacela();
+		if (is_null(static::$_instance)) {
+			static::$_instance = new Kacela();
 		}
 
-		return self::$_instance;
+		return static::$_instance;
 	}
 
 	/**
@@ -77,82 +77,7 @@ class Kohana_Kacela extends Gacela {
 	 */
 	public static function load($mapper)
 	{
-		return self::instance()->loadMapper(ucfirst($mapper));
-	}
-
-	/**
-	 * @param  string $class
-	 * @return bool|string
-	 */
-	public function autoload($class)
-	{
-		$parts = explode("\\", $class);
-		$self = self::instance();
-
-		if (isset($self->_namespaces[$parts[0]]))
-		{
-			if (class_exists($class))
-			{
-				return $class;
-			}
-			elseif ($parts[0] == 'Gacela')
-			{
-				return parent::autoload($class);
-			}
-			else
-			{
-
-				$path = $parts;
-				unset($path[0]);
-
-				$path = join(DIRECTORY_SEPARATOR, $path);
-
-				$file = $self->_namespaces[$parts[0]].strtolower($path).'.php';
-
-				if ($self->_findFile($file))
-				{
-					require $file;
-					return $class;
-				}
-			}
-		}
-		else
-		{
-			$namespaces = array_reverse($self->_namespaces);
-
-			foreach ($namespaces as $ns => $path)
-			{
-				if ($ns == 'Gacela')
-				{
-					return parent::autoload($ns.$class);
-				}
-
-				if (substr($class, 0, 1) == '\\')
-				{
-					$tmp = substr($class, 1);
-				}
-				else
-				{
-					$tmp = $class;
-				}
-
-				$file = $path.strtolower(str_replace("\\", DIRECTORY_SEPARATOR, $tmp)).'.php';
-
-				$tmp = $ns.$class;
-				echo $tmp.'<br/>';
-				if(class_exists($tmp))
-				{
-					return $tmp;
-				}
-				elseif ($self->_findFile($file))
-				{
-					require $file;
-					return $tmp;
-				}
-			}
-		}
-
-		return false;
+		return static::instance()->loadMapper(ucfirst($mapper));
 	}
 
 	/**

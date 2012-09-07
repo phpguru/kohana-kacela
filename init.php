@@ -17,11 +17,6 @@ if(is_dir(APPPATH . 'config/kacela'))
 	$kacela->configPath(APPPATH . 'config/kacela');
 }
 
-foreach($config['namespaces'] as $ns => $path)
-{
-	$kacela->register_namespace($ns, $path);
-}
-
 foreach($config['datasources'] as $name => $source)
 {
 	$kacela->register_datasource($name, $source['type'], $source);

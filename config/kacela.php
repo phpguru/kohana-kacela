@@ -9,11 +9,6 @@
 
 return array
 (
-	'namespaces' => array
-	(
-		'Kacela' => MODPATH.'kacela/classes/kacela/',
-		'App' => APPPATH.'classes/'
-	),
 	'datasources' => array
 	(
 		'db' => array
