@@ -1,3 +1,3 @@
 <?php
 
-class Kacela_Field_String extends Kohana_Kacela_Field_Field {}
+class Kacela_Field_String extends Kohana_Kacela_Field_String {}

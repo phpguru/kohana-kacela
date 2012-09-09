@@ -7,4 +7,4 @@
 */
 
 
-class Kohana_Criteria extends \Kacela\Kohana_Kacela_Criteria {}
+class Kacela_Criteria extends Kohana_Kacela_Criteria {}

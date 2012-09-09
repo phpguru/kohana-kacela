@@ -59,7 +59,7 @@ class Kohana_Kacela extends Gacela {
 
 	/**
 	 * @static
-	 * @return Gacela
+	 * @return \Kacela
 	 */
 	public static function instance()
 	{
@@ -78,6 +78,26 @@ class Kohana_Kacela extends Gacela {
 	public static function load($mapper)
 	{
 		return static::instance()->load_mapper(ucfirst($mapper));
+	}
+
+	/**
+	 * @param string $class
+	 * @return string
+	 */
+	public function autoload($class)
+	{
+		if(stripos($class, 'Gacela') === 0) {
+			return parent::autoload($class);
+		}
+
+		$class = str_replace("\\", '_', trim($class, "\\"));
+
+		if(stripos($class, 'Kacela') !== 0 AND strpos($class, 'Mapper') === false AND strpos($class, 'Model') === false)
+		{
+			$class = 'Kacela_'.$class;
+		}
+
+		return $class;
 	}
 
 	/**
@@ -128,6 +148,10 @@ class Kohana_Kacela extends Gacela {
 		return $this;
 	}
 
+	/**
+	 * @param $name
+	 * @return Gacela\DataSource\iDataSource
+	 */
 	public function get_datasource($name)
 	{
 		return parent::getDataSource($name);
@@ -152,19 +176,7 @@ class Kohana_Kacela extends Gacela {
 	 */
 	public function load_mapper($name)
 	{
-		$name = ucfirst($name);
-
-		$cached = $this->cache('mapper_'.$name);
-
-		if ($cached === false || is_null($cached)) {
-			$class = "Kacela_Mapper_" . $name;
-
-			$cached = new $class;
-
-			$this->cache('mapper_'.$name, $cached);
-		}
-
-		return $cached;
+		return parent::loadMapper($name);
 	}
 
 	/**
@@ -177,18 +189,8 @@ class Kohana_Kacela extends Gacela {
 	 */
 	public function make_collection($mapper, $data)
 	{
-		$col = 'Kacela_Collection_';
-		if($data instanceof \PDOStatement) {
-			$col .= 'Statement';
-		} elseif (is_array($data)) {
-			$col .= 'Arr';
-		} else {
-			throw new \Exception('Collection type is not defined!');
-		}
-
-		return new $col($mapper, $data);
+		return parent::makeCollection($mapper, $data);
 	}
-
 
 	/**
 	 * @param $name
@@ -198,13 +200,6 @@ class Kohana_Kacela extends Gacela {
 	 */
 	public function register_datasource($name, $type, $config)
 	{
-		$config['name'] = $name;
-		$config['type'] = $type;
-
-		$class = 'Kacela_DataSource_'.ucfirst($type);
-
-		$this->_sources[$name] = new $class($config);
-
-		return $this;
+		return parent::registerDataSource($name, $type, $config);
 	}
 }

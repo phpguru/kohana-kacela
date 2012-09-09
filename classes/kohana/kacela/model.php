@@ -85,6 +85,27 @@ abstract class Kohana_Kacela_Model extends M\Model
 	}
 
 	/**
+	 * @return \Gacela\Mapper\Mapper
+	 */
+	protected function _mapper()
+	{
+		if($this->_mapper instanceof Kacela_Mapper) {
+			return $this->_mapper;
+		}
+
+		if(is_string($this->_mapper)) {
+			$class = $this->_mapper;
+		} else {
+			$class = explode("_", get_class($this));
+			$class = end($class);
+		}
+
+		$this->_mapper = Kacela::load($class);
+
+		return $this->_mapper;
+	}
+
+	/**
 	 * @throws \Exception
 	 * @param  string $key
 	 * @return mixed

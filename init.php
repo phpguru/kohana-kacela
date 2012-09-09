@@ -10,7 +10,7 @@ $config = Kohana::$config->load('kacela');
 
 $kacela = Kacela::instance();
 
-Gacela\DataSource\Adapter\Mysql::$_separator = '-';
+Kacela_DataSource_Adapter_Mysql::$_separator = '-';
 
 if(is_dir(APPPATH . 'config/kacela'))
 {

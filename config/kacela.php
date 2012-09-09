@@ -13,8 +13,7 @@ return array
 	(
 		'db' => array
 		(
-			'type' => 'database',
-			'dbtype' => 'mysql',
+			'type' => 'mysql',
 			'schema' => 'kacela',
 			'host' => 'localhost',
 			'user' => 'root',
