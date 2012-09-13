@@ -169,24 +169,13 @@ abstract class Kohana_Kacela_Model extends M\Model
 		}
 	}
 
-	public function get_form($name = null)
+	public function get_form(array $fields)
 	{
-		if(is_null($name)) {
-			$name = get_class($this);
-			$name = explode('\\', $name);
-			$name = end($name);
-		}
+		$form = \Formo::form();
 
-		$form = \Formo::form($name);
-
-		foreach ($this->_fields as $field => $data)
+		foreach ($fields as $field)
 		{
-			if($data->primary === true && $data->sequenced === true)
-			{
-				continue;
-			}
-
-			$form->append($this->_formo_field($field, $data, $this->$field));
+			$form->append($this->_formo_field($field, $this->_fields[$field], $this->$field));
 		}
 
 		foreach ($form->as_array() as $alias => $val)
@@ -204,6 +193,11 @@ abstract class Kohana_Kacela_Model extends M\Model
 
 		return $form;
 	}
+
+	/**
+	 * @return array
+	 */
+	public function rules() {}
 
 	public function save($data = null)
 	{
@@ -227,7 +221,30 @@ abstract class Kohana_Kacela_Model extends M\Model
 			$data = $data->val();
 		}
 
-		return parent::validate($data);
+		$rs = parent::validate($data);
+
+		$rules = $this->rules();
+
+		if(!empty($rules))
+		{
+			$_validation = Validation::factory($this->_data)
+				->bind(':model', $this)
+				->bind(':original_values', $this->_originalData)
+				->bind(':changed', $this->_changed);
+
+			foreach ($this->rules() as $field => $rules)
+			{
+				$_validation->rules($field, $rules);
+			}
+
+			if($_validation->check() === false)
+			{
+				$rs = false;
+				$this->_errors = array_merge($this->_errors, $_validation->errors());
+			}
+		}
+
+		return $rs;
 	}
 
 }
