@@ -157,18 +157,6 @@ class Kohana_Kacela extends Gacela {
 		return parent::getDataSource($name);
 	}
 
-	public function incrementCache($key)
-	{
-		if (!$this->_cacheData) {
-			$this->_cached[$key]++;
-		} else {
-			$val = $this->_cache->get($key);
-			$val++;
-
-			$this->_cache->set($key, $val);
-		}
-	}
-
 	/**
 	 * @throws Exception
 	 * @param  string $name Relative name of the Mapper to load. For example, if the absolute name of the mapper was \App\Mapper\User, you would pass 'user' in as the argument
