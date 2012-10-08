@@ -10,6 +10,12 @@ require MODPATH.'kacela'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'Gacel
 
 class Kohana_Kacela extends Gacela {
 
+	/**
+	 * @static
+	 * @param $mapper
+	 * @param Gacela\Criteria $criteria
+	 * @return mixed
+	 */
 	public static function count($mapper, \Gacela\Criteria $criteria = null)
 	{
 		return static::load($mapper)->count($criteria);
@@ -17,7 +23,7 @@ class Kohana_Kacela extends Gacela {
 
 	/**
 	 * @static
-	 * @return Gacela\Criteria
+	 * @return Kacela_Criteria
 	 */
 	public static function criteria()
 	{
@@ -25,6 +31,12 @@ class Kohana_Kacela extends Gacela {
 		return new $criteria();
 	}
 
+	/**
+	 * @static
+	 * @param $mapper
+	 * @param null $id
+	 * @return Kacela_Model
+	 */
 	public static function factory($mapper, $id = null)
 	{
 		if(is_null($id))
@@ -39,7 +51,7 @@ class Kohana_Kacela extends Gacela {
 	 * @static
 	 * @param  $mapper
 	 * @param null $id
-	 * @return Gacela\Model
+	 * @return Kacela_Model
 	 */
 	public static function find($mapper, $id = null)
 	{
@@ -50,7 +62,7 @@ class Kohana_Kacela extends Gacela {
 	 * @static
 	 * @param  $mapper
 	 * @param Gacela\Criteria|null $criteria
-	 * @return Gacela\Collection
+	 * @return Gacela\Collection\Collection
 	 */
 	public static function find_all($mapper, \Gacela\Criteria $criteria = null)
 	{
@@ -101,49 +113,18 @@ class Kohana_Kacela extends Gacela {
 	}
 
 	/**
-	 * @param  $key
-	 * @param null $object
-	 * @return object|bool
+	 * @param $key
+	 * @param null $value
+	 * @return bool|object
 	 */
-	public function cache($key, $object = null, $replace = false)
+	public function cache_metadata($key, $value = null)
 	{
-		if(!$this->_cacheData AND ($this->_cacheSchema === false OR (stristr($key, 'resource_') === false AND stristr($key, 'mapper_') === false)))
-		{
-			if (is_null($object))
-			{
-				if (isset($this->_cached[$key]))
-				{
-					return $this->_cached[$key];
-				}
-
-				return false;
-			}
-			else
-			{
-				$this->_cached[$key] = $object;
-
-				return true;
-			}
-		}
-		else
-		{
-			if (is_null($object))
-			{
-				return $this->_cache->get($key);
-			}
-			else
-			{
-				return $this->_cache->set($key, $object);
-			}
-		}
+		return $this->cacheMetaData($key, $value);
 	}
 
-	public function enable_cache(Cache $cache, $schema = true, $data = true)
+	public function enable_cache(Cache $cache)
 	{
 		$this->_cache = $cache;
-
-		$this->_cacheSchema = $schema;
-		$this->_cacheData = $data;
 
 		return $this;
 	}
