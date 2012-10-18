@@ -10,16 +10,11 @@ $config = Kohana::$config->load('kacela');
 
 $kacela = Kacela::instance();
 
-Gacela\DataSource\Adapter\Mysql::$_separator = '-';
+Kacela_DataSource_Adapter_Mysql::$_separator = '-';
 
 if(is_dir(APPPATH . 'config/kacela'))
 {
 	$kacela->configPath(APPPATH . 'config/kacela');
-}
-
-foreach($config['namespaces'] as $ns => $path)
-{
-	$kacela->register_namespace($ns, $path);
 }
 
 foreach($config['datasources'] as $name => $source)
