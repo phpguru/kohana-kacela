@@ -17,7 +17,7 @@ abstract class Kohana_Kacela_Mapper extends M\Mapper
 	 */
 	protected function _collection($data)
 	{
-		return $this->_singleton()->make_collection($this, $data);
+		return $this->_kacela()->make_collection($this, $data);
 	}
 
 	/**
@@ -68,14 +68,6 @@ abstract class Kohana_Kacela_Mapper extends M\Mapper
 	}
 
 	/**
-	 * @return Kacela
-	 */
-	protected function _singleton()
-	{
-		return \kacela::instance();
-	}
-
-	/**
 	 * @param $string
 	 * @return string
 	 */
@@ -112,6 +104,19 @@ abstract class Kohana_Kacela_Mapper extends M\Mapper
 				\Profiler::set_name($token, \Kacela::debug($last, true));
 			}
 		}
+	}
+
+	/**
+	 * @return Kacela
+	 */
+	protected function _kacela()
+	{
+		return Kacela::instance();
+	}
+
+	protected function _source()
+	{
+		return $this->_kacela()->get_datasource($this->_source);
 	}
 
 	public function count($query = null)

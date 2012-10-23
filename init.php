@@ -17,9 +17,13 @@ if(is_dir(APPPATH . 'config/kacela'))
 	$kacela->configPath(APPPATH . 'config/kacela');
 }
 
-foreach($config['datasources'] as $name => $source)
+foreach($config['datasources'] as $name => $config)
 {
-	$kacela->register_datasource($name, $source['type'], $source);
+	$config['name'] = $name;
+
+	$source = Kacela::createDataSource($config);
+
+	$kacela->register_datasource($source);
 }
 
 if(isset($config['cache_schema']) OR isset($config['cache_data']))
