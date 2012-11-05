@@ -6,11 +6,10 @@
  *
  */
 
-namespace Kacela\Model;
-
 use Gacela\Model as M;
 
-abstract class Model extends M\Model {
+abstract class Kohana_Kacela_Model extends M\Model
+{
 
 	protected function _formo_rules($field)
 	{
@@ -96,7 +95,7 @@ abstract class Model extends M\Model {
 		if (method_exists($this, $method)) {
 			return $this->$method();
 		} elseif (array_key_exists($key, $this->_relations)) {
-			return $this->_mapper()->findRelation($key, $this->_data);
+			return $this->_mapper->findRelation($key, $this->_data);
 		} else {
 			if(property_exists($this->_data, $key)) {
 				return $this->_data->$key;
@@ -119,7 +118,7 @@ abstract class Model extends M\Model {
 		} elseif (isset($this->_relations[$key])) {
 			$relation = $this->$key;
 
-			if ($relation instanceof \Gacela\Collection) {
+			if ($relation instanceof \Gacela\Collection\Collection) {
 				return count($relation) > 0;
 			} else {
 				if (!is_array($this->_relations[$key])) {
@@ -149,24 +148,22 @@ abstract class Model extends M\Model {
 		}
 	}
 
-	public function get_form($name = null)
+	/**
+	 * @param array $fields
+	 * @return Formo_Form
+	 */
+	public function get_form(array $fields = array())
 	{
-		if(is_null($name)) {
-			$name = get_class($this);
-			$name = explode('\\', $name);
-			$name = end($name);
+		$form = \Formo::form();
+
+		if(empty($fields))
+		{
+			$fields = array_keys($this->_fields);
 		}
 
-		$form = \Formo::form($name);
-
-		foreach ($this->_fields as $field => $data)
+		foreach ($fields as $field)
 		{
-			if($data->primary === true && $data->sequenced === true)
-			{
-				continue;
-			}
-
-			$form->append($this->_formo_field($field, $data, $this->$field));
+			$form->append($this->_formo_field($field, $this->_fields[$field], $this->$field));
 		}
 
 		foreach ($form->as_array() as $alias => $val)
@@ -184,6 +181,11 @@ abstract class Model extends M\Model {
 
 		return $form;
 	}
+
+	/**
+	 * @return array
+	 */
+	public function rules() {}
 
 	public function save($data = null)
 	{
@@ -207,7 +209,30 @@ abstract class Model extends M\Model {
 			$data = $data->val();
 		}
 
-		return parent::validate($data);
+		$rs = parent::validate($data);
+
+		$rules = $this->rules();
+
+		if(!empty($rules))
+		{
+			$_validation = Validation::factory($this->_data)
+				->bind(':model', $this)
+				->bind(':original_values', $this->_originalData)
+				->bind(':changed', $this->_changed);
+
+			foreach ($this->rules() as $field => $rules)
+			{
+				$_validation->rules($field, $rules);
+			}
+
+			if($_validation->check() === false)
+			{
+				$rs = false;
+				$this->_errors = array_merge($this->_errors, $_validation->errors());
+			}
+		}
+
+		return $rs;
 	}
 
 }

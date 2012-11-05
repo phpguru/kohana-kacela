@@ -9,17 +9,11 @@
 
 return array
 (
-	'namespaces' => array
-	(
-		'App' => APPPATH.'classes/',
-		'Kacela' => MODPATH.'kacela/classes/kacela/'
-	),
 	'datasources' => array
 	(
 		'db' => array
 		(
-			'type' => 'database',
-			'dbtype' => 'mysql',
+			'type' => 'mysql',
 			'schema' => 'kacela',
 			'host' => 'localhost',
 			'user' => 'root',

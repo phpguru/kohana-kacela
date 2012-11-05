@@ -8,154 +8,199 @@
 
 require MODPATH.'kacela'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'Gacela'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'Gacela.php';
 
-class Kohana_Kacela extends Gacela {
+class Kohana_Kacela extends Gacela
+{
+	/**
+	 * @var Kohana_Cache
+	 */
+	protected $_cache;
 
-	public static function count($mapper, \Gacela\Criteria $criteria = null)
+	/**
+	 * @static
+	 * @param array $config
+	 * @return mixed
+	 */
+	public static function create_datasource(array $config)
 	{
-		return self::load($mapper)->count($criteria);
+		return parent::createDataSource($config);
 	}
 
 	/**
 	 * @static
-	 * @return Gacela\Criteria
+	 * @param $mapper
+	 * @param Gacela\Criteria $criteria
+	 * @return mixed
+	 */
+	public static function count($mapper, \Gacela\Criteria $criteria = null)
+	{
+		return static::load($mapper)->count($criteria);
+	}
+
+	/**
+	 * @static
+	 * @return Kacela_Criteria
 	 */
 	public static function criteria()
 	{
-		$criteria = self::instance()->autoload('\\Criteria');
+		$criteria = static::instance()->autoload('\\Criteria');
 		return new $criteria();
 	}
 
+	/**
+	 * @static
+	 * @param $mapper
+	 * @param null $id
+	 * @return Kacela_Model
+	 */
 	public static function factory($mapper, $id = null)
 	{
 		if(is_null($id))
 		{
-			return self::load($mapper)->load((object) array());
+			return static::load($mapper)->load((object) array());
 		}
 
-		return self::find($mapper, $id);
+		return static::find($mapper, $id);
 	}
 
 	/**
 	 * @static
 	 * @param  $mapper
 	 * @param null $id
-	 * @return Gacela\Model
+	 * @return Kacela_Model
 	 */
 	public static function find($mapper, $id = null)
 	{
-		return self::load($mapper)->find($id);
+		return static::load($mapper)->find($id);
 	}
 
 	/**
 	 * @static
 	 * @param  $mapper
 	 * @param Gacela\Criteria|null $criteria
-	 * @return Gacela\Collection
+	 * @return Gacela\Collection\Collection
 	 */
 	public static function find_all($mapper, \Gacela\Criteria $criteria = null)
 	{
-		return self::load($mapper)->find_all($criteria);
+		return static::load($mapper)->find_all($criteria);
 	}
 
 	/**
 	 * @static
-	 * @return Gacela
+	 * @return Kacela
 	 */
 	public static function instance()
 	{
-		if (is_null(self::$_instance)) {
-			self::$_instance = new Kacela();
+		if (is_null(static::$_instance)) {
+			static::$_instance = new Kacela();
 		}
 
-		return self::$_instance;
+		return static::$_instance;
 	}
 
 	/**
 	 * @static
 	 * @param  $mapper
-	 * @return Mapper\Mapper
+	 * @return Kacela_Mapper
 	 */
 	public static function load($mapper)
 	{
-		return self::instance()->loadMapper(ucfirst($mapper));
+		return static::instance()->load_mapper(ucfirst($mapper));
 	}
 
 	/**
-	 * @param  string $class
-	 * @return bool|string
+	 * @param string $class
+	 * @return string
 	 */
 	public function autoload($class)
 	{
-		$parts = explode("\\", $class);
-		$self = self::instance();
-
-		if (isset($self->_namespaces[$parts[0]]))
-		{
-			if (class_exists($class))
-			{
-				return $class;
-			}
-			elseif ($parts[0] == 'Gacela')
-			{
-				return parent::autoload($class);
-			}
-			else
-			{
-
-				$path = $parts;
-				unset($path[0]);
-
-				$path = join(DIRECTORY_SEPARATOR, $path);
-
-				$file = $self->_namespaces[$parts[0]].strtolower($path).'.php';
-
-				if ($self->_findFile($file))
-				{
-					require $file;
-					return $class;
-				}
-			}
-		}
-		else
-		{
-			$namespaces = array_reverse($self->_namespaces);
-
-			foreach ($namespaces as $ns => $path)
-			{
-				if ($ns == 'Gacela')
-				{
-					return parent::autoload($class);
-				}
-
-				if (substr($class, 0, 1) == '\\')
-				{
-					$tmp = substr($class, 1);
-				}
-				else
-				{
-					$tmp = $class;
-				}
-
-				$file = $path.strtolower(str_replace("\\", DIRECTORY_SEPARATOR, $tmp)).'.php';
-
-				if ($self->_findFile($file))
-				{
-					$class = $ns . $class;
-
-					if (class_exists($class))
-					{
-						return $class;
-					}
-					else
-					{
-						require $file;
-						return $class;
-					}
-				}
-			}
+		if(stripos($class, 'Gacela') === 0) {
+			return parent::autoload($class);
 		}
 
-		return false;
+		$class = str_replace("\\", '_', trim($class, "\\"));
+
+		if(stripos($class, 'Kacela') !== 0 AND strpos($class, 'Mapper') === false AND strpos($class, 'Model') === false)
+		{
+			$class = 'Kacela_'.$class;
+		}
+
+		return $class;
+	}
+
+	/**
+	 * @param $key
+	 * @param null $value
+	 * @return bool|object
+	 */
+	public function cache_metadata($key, $value = null)
+	{
+		return $this->cacheMetaData($key, $value);
+	}
+
+	public function enable_cache(Cache $cache)
+	{
+		$this->_cache = $cache;
+
+		return $this;
+	}
+
+	/**
+	 * @param $name
+	 * @return Gacela\DataSource\iDataSource
+	 */
+	public function get_datasource($name)
+	{
+		return parent::getDataSource($name);
+	}
+
+	/**
+	 * @throws Exception
+	 * @param  string $name Relative name of the Mapper to load. For example, if the absolute name of the mapper was \App\Mapper\User, you would pass 'user' in as the argument
+	 * @return Gacela\Mapper\Mapper
+	 */
+	public function load_mapper($name)
+	{
+		$name = ucfirst($name);
+
+		if(stripos($name, 'Mapper') === false) {
+			$name = "Mapper_" . $name;
+		}
+
+		$name = $this->autoload($name);
+
+		$cached = $this->cache_metadata($name);
+
+		if (!$cached) {
+			$cached = new $name();
+
+			$this->cache_metadata($name, $cached);
+		}
+
+		return $cached;
+	}
+
+	/**
+	 * Collection factory method
+	 *
+	 * @param \Gacela\Mapper\Mapper $mapper
+	 * @param array $data
+	 * @return \Gacela\Collection\Collection
+	 * @throws Exception
+	 */
+	public function make_collection($mapper, $data)
+	{
+		return parent::makeCollection($mapper, $data);
+	}
+
+	/**
+	 * @param $name
+	 * @param $type
+	 * @param $config
+	 * @return Gacela
+	 */
+	public function register_datasource(Gacela\DataSource\iDataSource $source)
+	{
+		return parent::registerDataSource($source);
 	}
 
 	/**
@@ -163,73 +208,27 @@ class Kohana_Kacela extends Gacela {
 	 * @param null $object
 	 * @return object|bool
 	 */
-	public function cache($key, $object = null, $replace = false)
+	protected function _cache($key, $object = null)
 	{
-		if(!$this->_cacheData AND ($this->_cacheSchema === false OR (stristr($key, 'resource_') === false AND stristr($key, 'mapper_') === false)))
-		{
-			if (is_null($object))
-			{
-				if (isset($this->_cached[$key]))
-				{
+		if(!is_object($this->_cache)) {
+			if(is_null($object)) {
+				if(isset($this->_cached[$key])) {
 					return $this->_cached[$key];
 				}
 
 				return false;
-			}
-			else
-			{
+			} else {
 				$this->_cached[$key] = $object;
 
 				return true;
 			}
-		}
-		else
-		{
-			if (is_null($object))
-			{
+		} else {
+
+			if(is_null($object)) {
 				return $this->_cache->get($key);
-			}
-			else
-			{
+			} else {
 				return $this->_cache->set($key, $object);
 			}
 		}
-	}
-
-	public function enable_cache(Cache $cache, $schema = true, $data = true)
-	{
-		$this->_cache = $cache;
-
-		$this->_cacheSchema = $schema;
-		$this->_cacheData = $data;
-
-		return $this;
-	}
-
-	public function get_datasource($name)
-	{
-		return parent::getDataSource($name);
-	}
-
-	public function incrementCache($key)
-	{
-		if (!$this->_cacheData) {
-			$this->_cached[$key]++;
-		} else {
-			$val = $this->_cache->get($key);
-			$val++;
-
-			$this->_cache->set($key, $val);
-		}
-	}
-
-	public function register_datasource($name, $type, $config)
-	{
-		return parent::registerDataSource($name, $type, $config);
-	}
-
-	public function register_namespace($ns, $path)
-	{
-		return parent::registerNamespace($ns, $path);
 	}
 }

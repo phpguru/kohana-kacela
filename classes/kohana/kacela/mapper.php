@@ -6,14 +6,64 @@
  *
  */
 
-//defined('SYSPATH') OR die('No direct access allowed.');
-
-namespace Kacela\Mapper;
-
 use Gacela\Mapper as M;
 
-abstract class Mapper extends M\Mapper implements iMapper {
+abstract class Kohana_Kacela_Mapper extends M\Mapper
+{
 
+	/**
+	 * @param \PDOStatement | array $data
+	 * @return \Gacela\Collection\Collection
+	 */
+	protected function _collection($data)
+	{
+		return $this->_kacela()->make_collection($this, $data);
+	}
+
+	/**
+	 * @return Kacela_Mapper
+	 */
+	protected function _initModel()
+	{
+		if(is_null($this->_modelName))
+		{
+			$this->_modelName = str_replace('Mapper', 'Model', get_class($this));
+		}
+
+		return parent::_initModel();
+	}
+
+	/**
+	 * @return Mapper
+	 */
+	protected function _initResource()
+	{
+		if(is_null($this->_resourceName)) {
+			$class = explode('_', get_class($this));
+			$class = end($class);
+			$class = strtolower($class);
+
+			$this->_resourceName = $this->_pluralize($class);
+		}
+
+		return parent::_initResource();
+	}
+
+	/**
+	 * @param $string
+	 * @return string
+	 */
+	protected function _pluralize($string)
+	{
+		return Inflector::plural($string);
+	}
+
+	/**
+	 * @param $query
+	 * @param null $args
+	 * @param Gacela\DataSource\Resource $resource
+	 * @return PDOStatement
+	 */
 	protected function _runQuery($query, $args = null, \Gacela\DataSource\Resource $resource = null)
 	{
 		$token = $this->_start_profile();
@@ -23,9 +73,13 @@ abstract class Mapper extends M\Mapper implements iMapper {
 		return $return;
 	}
 
-	protected function _singleton()
+	/**
+	 * @param $string
+	 * @return string
+	 */
+	protected function _singularize($string)
 	{
-		return \kacela::instance();
+		return Inflector::singular($string);
 	}
 
 	protected function _start_profile()
@@ -56,6 +110,19 @@ abstract class Mapper extends M\Mapper implements iMapper {
 				\Profiler::set_name($token, \Kacela::debug($last, true));
 			}
 		}
+	}
+
+	/**
+	 * @return Kacela
+	 */
+	protected function _kacela()
+	{
+		return Kacela::instance();
+	}
+
+	protected function _source()
+	{
+		return $this->_kacela()->get_datasource($this->_source);
 	}
 
 	public function count($query = null)

@@ -10,21 +10,20 @@ $config = Kohana::$config->load('kacela');
 
 $kacela = Kacela::instance();
 
-Gacela\DataSource\Adapter\Mysql::$_separator = '-';
+Kacela_DataSource_Adapter_Mysql::$_separator = '-';
 
 if(is_dir(APPPATH . 'config/kacela'))
 {
 	$kacela->configPath(APPPATH . 'config/kacela');
 }
 
-foreach($config['namespaces'] as $ns => $path)
+foreach($config['datasources'] as $name => $config)
 {
-	$kacela->register_namespace($ns, $path);
-}
+	$config['name'] = $name;
 
-foreach($config['datasources'] as $name => $source)
-{
-	$kacela->register_datasource($name, $source['type'], $source);
+	$source = Kacela::createDataSource($config);
+
+	$kacela->register_datasource($source);
 }
 
 if(isset($config['cache_schema']) OR isset($config['cache_data']))
