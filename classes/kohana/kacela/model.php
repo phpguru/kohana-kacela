@@ -11,6 +11,11 @@ use Gacela\Model as M;
 abstract class Kohana_Kacela_Model extends M\Model
 {
 
+	/**
+	 * @var Kohana_Kacela
+	 */
+	protected $_kacela;
+
 	protected function _formo_rules($field)
 	{
 		$rules = array();
@@ -82,6 +87,13 @@ abstract class Kohana_Kacela_Model extends M\Model
 	protected function _get_errors()
 	{
 		return parent::_getErrors();
+	}
+
+	public function __construct(\Gacela $gacela, \Gacela\Mapper\iMapper $mapper, $data = array())
+	{
+		parent::__construct($gacela, $mapper, $data);
+
+		$this->_kacela = $this->_gacela;
 	}
 
 	/**
