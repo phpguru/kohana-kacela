@@ -26,7 +26,12 @@ foreach($config['datasources'] as $name => $config)
 	$kacela->register_datasource($source);
 }
 
-if(isset($config['cache_schema']) OR isset($config['cache_data']))
+if(isset($config['cache']))
 {
-	$kacela->enable_cache(Cache::instance(), \Arr::get($config, 'cache_schema', true), \Arr::get($config, 'cache_data', false));
+	if(is_bool($config['cache']))
+	{
+		$config['cache'] = null;
+	}
+
+	$kacela->enable_cache(Cache::instance($config['cache']));
 }
