@@ -137,6 +137,11 @@ class Kohana_Kacela extends Gacela
 		return $this->cacheMetaData($key, $value);
 	}
 
+	public function enableCache($servers)
+	{
+		$this->enable_cache($servers);
+	}
+
 	public function enable_cache(Cache $cache)
 	{
 		$this->_cache = $cache;
@@ -152,6 +157,35 @@ class Kohana_Kacela extends Gacela
 	{
 		return parent::getDataSource($name);
 	}
+
+	/**
+	 * @param $key
+	 * @return Gacela
+	 */
+	public function incrementDataCache($key)
+	{
+		return $this->increment_data_cache($key);
+	}
+
+	public function increment_data_cache($key)
+	{
+		if(is_object(($this->_cache)))
+		{
+			if(method_exists($this->_cache, 'increment'))
+			{
+				$this->_cache->increment($key);
+			}
+			else
+			{
+				$version = $this->_cache($key);
+
+				$this->_cache($key, $version+1);
+			}
+		}
+
+		return $this;
+	}
+
 
 	/**
 	 * @throws Exception
@@ -201,34 +235,5 @@ class Kohana_Kacela extends Gacela
 	public function register_datasource(Gacela\DataSource\iDataSource $source)
 	{
 		return parent::registerDataSource($source);
-	}
-
-	/**
-	 * @param  $key
-	 * @param null $object
-	 * @return object|bool
-	 */
-	protected function _cache($key, $object = null)
-	{
-		if(!is_object($this->_cache)) {
-			if(is_null($object)) {
-				if(isset($this->_cached[$key])) {
-					return $this->_cached[$key];
-				}
-
-				return false;
-			} else {
-				$this->_cached[$key] = $object;
-
-				return true;
-			}
-		} else {
-
-			if(is_null($object)) {
-				return $this->_cache->get($key);
-			} else {
-				return $this->_cache->set($key, $object);
-			}
-		}
 	}
 }

@@ -26,7 +26,7 @@ foreach($config->get('datasources') as $name => $source)
 	$kacela->register_datasource($source);
 }
 
-if($cache = $config->get('cache') !== false)
+if(($cache = $config->get('cache')) !== false)
 {
 	if(is_bool($cache))
 	{
