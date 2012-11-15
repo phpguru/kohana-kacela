@@ -24,6 +24,6 @@ return array
 			'password' => ''
 		)
 	),
-	'cache_schema' => false,
-	'cache_data' => false
+	'cache' => false,
+	'profiling' => false
 );
