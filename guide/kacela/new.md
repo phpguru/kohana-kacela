@@ -7,7 +7,7 @@ Let's assume that you were creating your own internal database of local hoodlums
 When calling you'll need to know what other names they might be known as so you can be sure to find them.
 
 Storing the data in a hierarchal format with XML is fairly straightforward. Each 'local' is represented by a node named 'local' with a child 'aliases' node to contain the local's aliases.
-~~~~
+```xml
 <xml version="1.0>
 	<local id="1" name="Bobby Mcintire" email="bobby@kacela.com" phone="1234567891" />
 	<local id="2" name="Frankfurt McGee" email="sweetcheeks@kacela.com" phone="9876543214">
@@ -18,7 +18,7 @@ Storing the data in a hierarchal format with XML is fairly straightforward. Each
 		</aliases>
 	</local>
 </xml>
-~~~~
+```
 
 With a relational database, we would create two tables, one to hold the basic information about each local, and a table to hold their aliases.
 
@@ -40,7 +40,7 @@ id | alias
 
 The same data in PHP would be stored in classes like so:
 
-~~~~
+```php
 class Local {
 
 	protected $data = array(
@@ -70,7 +70,7 @@ class Local {
 	);
 
 }
-~~~~
+```
 
 As you can see the way that data is stored can be vastly different from the way that we interact with data in our application code.
 This is called the object-impedance mismatch. A common design pattern has arisen to hide the complexities of the differences between data in application code and data stores called Object-Relational Mapping.
@@ -85,16 +85,16 @@ With Active Record, one object represents one Record from the Data Source.
 With an Active Record object, business logic and data access logic are contained in a single object.
 A basic Active Record object would look like so:
 
-~~~~
+```php
 class Model_Local extends ORM
 {
 	// Note that aliases which are stored in another table cannot be fetched yet
 }
-~~~~
+```
 
 And would be accessed like so:
 
-~~~~
+```php
 $local = ORM::find('local', 1);
 
 // echo's Bobby Mcintire to the screen
@@ -103,7 +103,7 @@ echo $local->name;
 $local->phone = '9875412356'
 
 $local->save();
-~~~~
+```
 
 # Kacela's Basic Philosophies
 
@@ -123,6 +123,8 @@ you tackle the complexity upfront. When developing Kacela, the following were ju
 2. Execute git submodule add https://github.com/noah-goodrich/kohana-kacela modules/kacela
 3. Execute git submodule init
 4. Execute git submodule update
+5. Under application/classes, add two new directories: model, mapper
+
 
 ## Configuration
 
@@ -195,4 +197,36 @@ Configuration settings for Kacela are stored in modules/kacela/kacela.php. This 
 		 */
 		'profiling' => false
 	);
+
+# Basic Usage
+
+With Kacela installed I would create the following files:
+
+APPATH/classes/mapper/local.php
+
+```php
+class Mapper_Local extends Kacela_Mapper {}
+```
+
+APPATH/classes/model/local.php
+
+```php
+class Model_Local extends Kacela_Model {}
+```
+
+Now, I can load and manipulate a basic model:
+
+```php
+$local = Kacela::factory('local', 1);
+
+// echo's Bobby Mcintire to the screen
+echo $local->name;
+
+$local->phone = '9875412356'
+
+// Saves the updated record to the database
+$local->save();
+```
+
+
 
