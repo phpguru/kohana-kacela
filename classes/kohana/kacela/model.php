@@ -175,7 +175,10 @@ abstract class Kohana_Kacela_Model extends M\Model
 
 		foreach ($fields as $field)
 		{
-			$form->append($this->_formo_field($field, $this->_fields[$field], $this->$field));
+			if($meta = \Arr::get($this->_fields, $field))
+			{
+				$form->append($this->_formo_field($field, $meta, $this->$field));
+			}
 		}
 
 		foreach ($form->as_array() as $alias => $val)
