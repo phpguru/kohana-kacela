@@ -235,9 +235,9 @@ abstract class Kohana_Kacela_Model extends M\Model
 				->bind(':original_values', $this->_originalData)
 				->bind(':changed', $this->_changed);
 
-			foreach ($this->rules() as $field => $rules)
+			foreach ($rules as $field => $r)
 			{
-				$_validation->rules($field, $rules);
+				$_validation->rules($field, $r);
 			}
 
 			if($_validation->check() === false)
