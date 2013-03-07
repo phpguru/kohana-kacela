@@ -175,7 +175,10 @@ abstract class Kohana_Kacela_Model extends M\Model
 
 		foreach ($fields as $field)
 		{
-			$form->append($this->_formo_field($field, $this->_fields[$field], $this->$field));
+			if($meta = \Arr::get($this->_fields, $field))
+			{
+				$form->append($this->_formo_field($field, $meta, $this->$field));
+			}
 		}
 
 		foreach ($form->as_array() as $alias => $val)
@@ -227,20 +230,25 @@ abstract class Kohana_Kacela_Model extends M\Model
 
 		if(!empty($rules))
 		{
-			$_validation = Validation::factory($this->_data)
+			$_validation = Validation::factory((array) $this->_data)
 				->bind(':model', $this)
 				->bind(':original_values', $this->_originalData)
 				->bind(':changed', $this->_changed);
 
-			foreach ($this->rules() as $field => $rules)
+			foreach ($rules as $field => $r)
 			{
-				$_validation->rules($field, $rules);
+				$_validation->rules($field, $r);
 			}
 
 			if($_validation->check() === false)
 			{
 				$rs = false;
-				$this->_errors = array_merge($this->_errors, $_validation->errors());
+
+				foreach($_validation->errors() as $field => $err)
+				{
+					$this->_errors[$field] = $err[0];
+				}
+
 			}
 		}
 
