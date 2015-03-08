@@ -1,28 +1,37 @@
 <?php
-/** 
+/**
  * @author noah
  * @date 3/23/11
  * @brief
- * 
+ *
  */
 
-$config = Kohana::config('kacela');
+$config = Kohana::$config->load('kacela');
 
 $kacela = Kacela::instance();
 
-Gacela\DataSource\Adapter\Mysql::$_separator = '_';
+Kacela_DataSource_Adapter_Mysql::$_separator = '-';
 
-foreach($config['namespaces'] as $ns => $path)
+if(is_dir(APPPATH . 'config/kacela'))
 {
-	$kacela->register_namespace($ns, $path);
+	$kacela->configPath(APPPATH . 'config/kacela');
 }
 
-foreach($config['datasources'] as $name => $source)
+foreach($config->get('datasources') as $name => $source)
 {
-	$kacela->register_datasource($name, $source['type'], $source);
+	$source['name'] = $name;
+
+	$source = Kacela::createDataSource($source);
+
+	$kacela->register_datasource($source);
 }
 
-if($config['cache'])
+if(($cache = $config->get('cache')) !== false)
 {
-	$kacela->enable_cache(Cache::instance());
+	if(is_bool($cache))
+	{
+		$cache = null;
+	}
+
+	$kacela->enable_cache(Cache::instance($cache));
 }
