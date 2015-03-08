@@ -45,29 +45,6 @@ return array
 			 */
 			'password' => ''
 		),
-		/**
-		 *
-		 */
-		'sf' => array
-		(
-			'type' => 'salesforce',
-			/**
-			 * Kacela uses the Force.com toolkit for PHP.
-			 * It can be found here: https://github.com/developerforce/Force.com-Toolkit-for-PHP
-			 * Once installed in your application, Kacela needs to know the path to the soap client.
-			 */
-			'soapclient_path' => MODPATH.'sf/vendor/soapclient/',
-			/**
-			 * Specify the full path to your wsdl file for Salesforce
-			 */
-			'wsdl_path' => APPPATH.'config/sf.wsdl',
-			'username' => 'salesforceuser@domain.com.sandbox',
-			'password' => 'SecretPasswordWithSalesforceHash',
-			/**
-			 * Specifies which Salesforce objects are available for use in Kacela
-			 */
-			'objects' => array()
-		)
 	),
 	/**
 	 * Can specify TRUE to use default Cache::instance() otherwise, specify Cache group name
